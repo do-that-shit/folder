@@ -1,0 +1,350 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+import pickle
+df = pd.read_csv("heart_disease.csv")
+df
+#Data Exploration
+stats = df.describe(include = 'all')
+stats
+df.dtypes
+#Categorical Var
+df['Sex'].value_counts()
+df['ChestPainType'].value_counts()
+df['FastingBS'].value_counts()
+df['RestingECG'].value_counts()
+df['ExerciseAngina'].value_counts()
+df['ST_Slope'].value_counts()
+df['HeartDisease'].value_counts()
+#Data Visualization
+# Set up subplots
+fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(15, 10))
+
+# Plot Sex distribution
+sns.countplot(x='Sex', data=df, ax=axes[0, 0])
+axes[0, 0].set_title('Distribution of Sex')
+
+# Plot ChestPainType distribution
+sns.countplot(x='ChestPainType', data=df, ax=axes[0, 1])
+axes[0, 1].set_title('Distribution of ChestPainType')
+
+# Plot FastingBS distribution
+sns.countplot(x='FastingBS', data=df, ax=axes[0, 2])
+axes[0, 2].set_title('Distribution of FastingBS')
+
+# Plot RestingECG distribution
+sns.countplot(x='RestingECG', data=df, ax=axes[1, 0])
+axes[1, 0].set_title('Distribution of RestingECG')
+
+# Plot ExerciseAngina distribution
+sns.countplot(x='ExerciseAngina', data=df, ax=axes[1, 1])
+axes[1, 1].set_title('Distribution of ExerciseAngina')
+
+# Plot ST_Slope distribution
+sns.countplot(x='ST_Slope', data=df, ax=axes[1, 2])
+axes[1, 2].set_title('Distribution of ST_Slope')
+
+
+
+# Adjust layout
+plt.tight_layout()
+plt.show()
+
+numerical_columns = df.select_dtypes(include=['int64','float64']).columns
+# the correlation matrix
+correlation_matrix = df[numerical_columns].corr()
+# heatmap for visualization
+plt.figure(figsize=(12, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5)
+plt.title('Correlation Matrix')
+plt.show()
+
+age_data = df['Age']
+plt.hist(age_data, bins=20, color='skyblue', edgecolor='black')
+plt.title('Distribution of Age')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.grid(axis='y')
+plt.show()
+
+plt.hist(df['HeartDisease'] , bins = 20 )
+plt.xlabel("Heart Disease")
+plt.ylabel("Frequency")
+plt.grid(axis = 'y')
+plt.show()
+
+# Example scatter plot for Age vs MaxHR
+sns.scatterplot(x='Age', y='MaxHR', data=df)
+plt.title('Scatter Plot: Age vs MaxHR')
+plt.show()
+
+sns.scatterplot(x='Age', y='Cholesterol', data=df)
+plt.title('Scatter Plot: Age vs Cholesterol')
+plt.show()
+
+
+
+sns.scatterplot(x='Age', y='RestingBP', data=df)
+plt.title('Scatter Plot: Age vs RestingBP')
+plt.show()
+
+
+sns.scatterplot(x='Age', y='FastingBS', data=df)
+plt.title('Scatter Plot: Age vs FastingBS')
+plt.show()
+
+
+sns.scatterplot(x='Age', y='Oldpeak', data=df)
+plt.title('Scatter Plot: Age vs Oldpeak')
+plt.show()
+
+
+sns.scatterplot(x='Age', y='HeartDisease', data=df)
+plt.title('Scatter Plot: Age vs HeartDisease')
+plt.show()
+
+
+numerical_cols = ['Age', 'RestingBP', 'Cholesterol', 'MaxHR', 'Oldpeak']
+
+# Create box plots
+plt.figure(figsize=(12, 8))
+sns.boxplot(data=df[numerical_cols], orient='v', palette='Set2')
+plt.title('Box Plots of Numerical Variables')
+plt.show()
+
+df.isnull().sum()
+
+df
+
+
+resting_bp_data = df['RestingBP']
+
+# Plot the distribution using a bar plot
+plt.figure(figsize=(15, 6))
+resting_bp_data.value_counts().sort_index().plot(kind='bar', color='skyblue', edgecolor='black')
+plt.title('Distribution of Resting Blood Pressure')
+plt.xlabel('Resting Blood Pressure')
+plt.ylabel('Frequency')
+plt.grid(axis='y')
+plt.show()
+
+resting_bp_data = df['Cholesterol']
+
+# Plot the distribution using a bar plot
+plt.figure(figsize=(10, 6))
+resting_bp_data.value_counts().sort_index().plot(kind='bar', color='skyblue', edgecolor='black')
+plt.title('Distribution of Cholesterol')
+plt.xlabel('Resting Blood Pressure')
+plt.ylabel('Frequency')
+plt.grid(axis='y')
+plt.show()
+
+resting_bp_data = df['MaxHR']
+
+# Plot the distribution using a bar plot
+plt.figure(figsize=(10, 6))
+resting_bp_data.value_counts().sort_index().plot(kind='bar', color='skyblue', edgecolor='black')
+plt.title('Distribution of MaxHR')
+plt.xlabel('Resting Blood Pressure')
+plt.ylabel('Frequency')
+plt.grid(axis='y')
+plt.show()
+
+sns.histplot(df['MaxHR'] , bins=10 , kde=True)
+sns.histplot(df['Cholesterol'], bins=10,kde=True)
+sns.histplot(df['RestingBP'], bins=10 , kde=True)
+
+#Data Cleaning
+# RestingBP's null values will be replaced by Normal RestingBP's value 
+# MaxHR will be replaced by 220 - age
+# Cholesterol will be replaced by median because the data contains outliers.
+
+df['RestingBP'].fillna(120, inplace=True)
+
+df['MaxHR'].fillna(220-df['Age'] , inplace=True)
+
+df['Cholesterol'].fillna(df['Cholesterol'].median(), inplace=True)
+
+df.isnull().sum()
+
+df.head(13)
+import pandas as pd
+from scipy import stats
+z_scores = stats.zscore(df[['Age', 'RestingBP', 'Cholesterol', 'MaxHR', 'Oldpeak']])
+threshold = 3
+outlier_indices = (abs(z_scores) > threshold).any(axis=1)
+columns_with_outliers = df.loc[outlier_indices, ['Age', 'RestingBP', 'Cholesterol', 'MaxHR', 'Oldpeak']]
+columns_with_outliers
+count = columns_with_outliers.shape[0]
+print(count)
+
+filtered_df.describe(include = 'all')
+
+df.describe(include = 'all')
+
+# Work on df_no_outliers
+
+#Feature-Target Relationship Visualization
+fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(15, 10))
+
+# Scatter plot for Age
+axes[0, 0].scatter(df['Age'], df['HeartDisease'])
+axes[0, 0].set_xlabel('Age')
+axes[0, 0].set_ylabel('Heart Disease')
+
+# Scatter plot for Sex
+axes[0, 1].scatter(df['Sex'], df['HeartDisease'])
+axes[0, 1].set_xlabel('Sex')
+axes[0, 1].set_ylabel('Heart Disease')
+
+# Scatter plot for ChestPainType
+axes[0, 2].scatter(df['ChestPainType'], df['HeartDisease'])
+axes[0, 2].set_xlabel('Chest Pain Type')
+axes[0, 2].set_ylabel('Heart Disease')
+
+
+# Scatter plot for RestingBP
+axes[1, 0].scatter(df['RestingBP'], df['HeartDisease'])
+axes[1, 0].set_xlabel('Resting Blood Pressure')
+axes[1, 0].set_ylabel('Heart Disease')
+
+# Scatter plot for Cholesterol
+axes[1, 1].scatter(df['Cholesterol'], df['HeartDisease'])
+axes[1, 1].set_xlabel('Cholesterol')
+axes[1, 1].set_ylabel('Heart Disease')
+
+# Scatter plot for FastingBS
+axes[1, 2].scatter(df['FastingBS'], df['HeartDisease'])
+axes[1, 2].set_xlabel('Fasting Blood Sugar')
+axes[1, 2].set_ylabel('Heart Disease')
+
+# Scatter plot for RestingECG
+axes[2, 0].scatter(df['RestingECG'], df['HeartDisease'])
+axes[2, 0].set_xlabel('Resting ECG')
+axes[2, 0].set_ylabel('Heart Disease')
+
+# Scatter plot for MaxHR
+axes[2, 1].scatter(df['MaxHR'], df['HeartDisease'])
+axes[2, 1].set_xlabel('Maximum Heart Rate (MaxHR)')
+axes[2, 1].set_ylabel('Heart Disease')
+
+# Scatter plot for ExerciseAngina
+axes[2, 2].scatter(df['ExerciseAngina'], df['HeartDisease'])
+axes[2, 2].set_xlabel('Exercise-Induced Angina')
+axes[2, 2].set_ylabel('Heart Disease')
+
+# Scatter plot for Oldpeak
+axes[3, 0].scatter(df['Oldpeak'], df['HeartDisease'])
+axes[3, 0].set_xlabel('Oldpeak')
+axes[3, 0].set_ylabel('Heart Disease')
+
+# Scatter plot for ST_Slope
+axes[3, 1].scatter(df['ST_Slope'], df['HeartDisease'])
+axes[3, 1].set_xlabel('ST Slope')
+axes[3, 1].set_ylabel('Heart Disease')
+
+# Hide the empty subplot in the last row and last column
+axes[3, 2].axis('off')
+
+# Adjust layout
+plt.tight_layout()
+
+# Show the plot
+plt.show()
+
+
+#Data Pre-processing¶
+
+Encoding features
+- Sex 
+- ChestPainType
+- RestingECG
+- ExerciseAngina
+- ST_Slope
+
+from sklearn.preprocessing import LabelEncoder
+categorical_variables = ['Sex', 'ChestPainType', 'RestingECG', 'ExerciseAngina', 'ST_Slope']
+label_encoder = LabelEncoder()
+for var in categorical_variables:
+    df[var] = label_encoder.fit_transform(df[var])
+
+df.head()
+
+df.dtypes
+
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+X = df.drop('HeartDisease', axis=1)
+y = df['HeartDisease']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Feature Scaling using StandardScaler
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+print(X_train_scaled)
+
+Model Implementation and Comparison
+Logistic Regression
+Decision Tree
+Support Vector Machine (SVM)
+K-Nearest Neighbors (KNN)
+
+
+Logistic Regression
+
+from sklearn.linear_model import LogisticRegression
+lc= LogisticRegression(random_state=42)
+lc.fit(X_train_scaled, y_train)
+y_pred_lr = lc.predict(X_test_scaled)
+​
+# Save a model
+pickle.dump(lc,open('lr.pkl' , 'wb'))
+model = pickle.load(open('lr.pkl' , 'rb'))
+Decision Tree
+
+from sklearn.tree import DecisionTreeClassifier
+dt = DecisionTreeClassifier(random_state=42)
+dt.fit(X_train_scaled , y_train)
+y_pred_dt = dt.predict(X_test_scaled)
+# Save a model
+pickle.dump(dt,open('dt.pkl' , 'wb'))
+model = pickle.load(open('dt.pkl' , 'rb'))
+Support Vector Machine (SVM)
+
+from sklearn.svm import SVC
+svm = SVC(random_state=42)
+svm.fit(X_train_scaled, y_train)
+y_pred_svm = svm.predict(X_test_scaled)
+# Save a model
+pickle.dump(svm,open('svm.pkl' , 'wb'))
+model = pickle.load(open('svm.pkl' , 'rb'))
+K-Nearest Neighbors (KNN)
+
+from sklearn.neighbors import KNeighborsClassifier
+knn_classifier = KNeighborsClassifier()
+knn_classifier.fit(X_train_scaled, y_train)
+y_pred_knn = knn_classifier.predict(X_test_scaled)
+# Save a model
+pickle.dump(knn_classifier,open('knn.pkl' , 'wb'))
+model = pickle.load(open('knn.pkl' , 'rb'))
+
+Evaluate model performance
+
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+def evaluate_model(y_true, y_pred, model_name):
+    accuracy = accuracy_score(y_true, y_pred)
+    print(f"\n{model_name} Accuracy: {accuracy:.4f}")
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_true, y_pred))
+    print("Classification Report:")
+    print(classification_report(y_true, y_pred))
+
+# Evaluate each model
+evaluate_model(y_test, y_pred_lr, "Logistic Regression")
+evaluate_model(y_test, y_pred_dt, "Decision Tree")
+evaluate_model(y_test, y_pred_svm, "Support Vector Machine (SVM)")
+evaluate_model(y_test, y_pred_knn, "K-Nearest Neighbors (KNN)")

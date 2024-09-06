@@ -1,0 +1,107 @@
+Basics of python
+Data Analysis
+- pandas 
+- ⁠numpy 
+- ⁠matplotlib 
+
+Refer : w3school, GeeksforGeeks, tutorialspoint etc. 
+
+Data preprocessing:
+- Missing values
+- Features scaling
+- Encoding
+- Train test split
+
+Supervised unsupervised learning
+- Linear regression
+- ⁠multiple regression
+- ⁠logistic regression
+- ⁠Decision tree
+- ⁠Random forest
+- ⁠Naive bayes
+- ⁠SVM
+- ⁠K means Clustering 
+Basics of Flask framework
+
+
+Data Preprocessing 
+1) import simple imputer 
+from sklearn.impute import SimpleImputer
+
+2)create an instance of simple imputer 
+se = SimpleImputer(missing_values = np.NaN ,strategy="mean")
+
+3)fit , transform the marks and age columns of your dataset
+dataset.loc[:,["marks","age"]] = se.fit_transform(dataset.loc[:,["marks","age"]])
+
+4) difference between loc and iloc
+loc handles label based indexing "a","b"
+iloc handles integer based indexing 0:3 [0,1,2]
+
+5) dependent and independent variables 
+dependent variable - value which we want to predict 
+independent variable - values using which we predict dependent variable 
+
+6)Choose and change dependent an independent variable columns , into arrays
+x = data.iloc[:,0:3].values
+y = data.iloc[;3:4].values 
+
+7) import train test split
+from sklearn.model_selection import train_test_split
+
+8) build x,y train and test variables 
+x_train , x_test , y_train , y_test = train_test_split(x,y,test_size=0.2)
+
+standardization
+process of making mean = 0 , std = 1
+this is done by making x ,(x-mean)/variance
+
+9) import StandardScaler
+from sklearn.preprocesing import StandardScaler
+
+10) make an instance of Standard Scaler
+sc = StandarScaler()
+
+11) scales column with index >=1 of x_train
+x_train.iloc[:,1:]= sc.fit_transform(x_train.iloc[:,1:])
+
+12) check x_train mean and std they should be ~0,~1 respectively
+x.train.mean()
+x.train.std()
+
+Encoding - changing categorical data into numerical data 
+label encoding 
+["red","green","blue"]
+[0,1,2]
+onehot encoding
+["red","green","blue"]
+[1,0,0]	[0,1,0]	[0,0,1]
+
+13) import label encoder
+from sklearn.preprocessing import LabelEncoder
+
+14) Make and instance of label encoder
+le = LabelEncoder()
+
+15) label encode country column of x_train
+x_train.loc[:,"Country"] =
+le.fit_transform[x_train.loc[:,"Country"]]
+
+16) label encode country column of x_test
+pd.get_dummies(x_test.loc[:,"Country"]
+
+Multiple Regression 
+one dependent variable predicted from many independent variables 
+
+Decision Tree 
+Each internal node - Decision 
+Each branch - an outcome of a decision
+Each leaf node - final outcome / prediciton 
+
+Random Forest 
+outputs of many decision trees combined 
+
+
+Decision Tree
+Decision Tree Classifier 
+Random Forest 

@@ -1,0 +1,80 @@
+EDA - understanding relationships , patterns, trends in the dataset 
+before applying machine learning algorithms 
+
+1) Summary Statistics:
+Central Tendency : Goal is to find the typical value in the data 
+Mean : gives sense of typical value in the data
+Median : middle value , avg of middle two values 
+	 less affected by extreme values , unlike mean 
+Variability : Goal is to undertsand the spread of data
+Range : Highest - lowest 
+Standar deviation : how much individual values differ from mean 
+
+high std , values farther from mean , data more spread out 
+low std , values closer to mean , data less Spread Out 
+
+Why to do Summary Statistics ?
+Knowing where our data is concentrated more 
+(Central Tendency) and How spread out it is (variablity), 
+helps us  making informed decisions , predictions 
+Outliers , extreme values , can impact interpretations 
+CT , V help us in understanding impact of outliers in the overall dataset 
+
+
+
+2) Data visualization : 
+histograms : x-axis : a Range of values 
+y-axis : how many values ie in that range for each 'x'
+
+Box-and-whisker plot :
+whiskers : highest and lowest data point 
+line in the middle : median 
+LHS of middle line , values < median 
+RHS of middle line , values > median 
+
+1st quartile
+2nd quartile
+3rd quartile
+4th quartile 
+
+
+3) Data cleaning 
+
+4) Data Distribution :
+
+Normality : Is needed for statistical assumptions 
+	    Is needed for modelling Assumptions (Linear regression) needs residuals (the differences between predicted and actual values)to normally distributed for high accuracy 
+Is assumed for hypothesis tests 
+
+Skewness , asymmetry of distribution 
+Kurtosis , measures tails and sharpness of distribution 
+Gives information about presence of outliers 
+highly skewed / kurtotic distribution may have outliers 
+
+If data not normally distributed / skewed/kurtotic
+beneficial to transform the data (logarithmic or power transformations) , suitable for modelling techniques 
+
+Positive skewness indicates a right-skewed distribution, while negative skewness indicates a left-skewed distribution. Kurtosis measures the tail heaviness of the distribution, with high positive values indicating heavy tails and negative values indicating light tails.
+
+
+5) Correlation analysis 
+Predicitve Modelling : 
+If two variables are strongly correlated, changes in one variable can be used to predict changes in the other.
+relationships between variables helps in Feature Selection :
+selecting the most relevant features. Features with high correlations might provide redundant information, and eliminating them can improve model efficiency and interpretability.
+
+Values closer to 1 indicate a strong positive correlation, values closer to -1 indicate a strong negative correlation, and values around 0 suggest a weak or no correlation.
+
+
+6) Dimensionality Reduction 
+To reduce Computational Complexity 
+To reduce overfitting , better generalisation , improved model 
+To Reduce Noisy Features 
+
+
+7) Outlier Detection 
+extreme points that distorts results of statistical analysis , mean , std etc 
+models may assign too much importance to outliers , resulting in models that do not generalize well with inaccurate data 
+
+Outlier Labelling 
+Transformation
